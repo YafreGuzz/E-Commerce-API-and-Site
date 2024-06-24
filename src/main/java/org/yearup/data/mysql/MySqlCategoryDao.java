@@ -1,12 +1,16 @@
 package org.yearup.data.mysql;
 
+import com.mysql.cj.protocol.Resultset;
 import org.springframework.stereotype.Component;
 import org.yearup.data.CategoryDao;
 import org.yearup.models.Category;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -20,22 +24,53 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
     @Override
     public List<Category> getAllCategories()
     {
-        // get all categories
-        return null;
+        List<Category> categories = new ArrayList<>();
+        String query = "SELECT * FROM categories";
+
+        try (Connection connection = getConnection())
+        {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while(resultSet.next())
+            {
+                Category category = mapRow(resultSet);
+                categories.add(category);
+            }
+        }
+        catch(SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
+        return categories;
     }
 
     @Override
     public Category getById(int categoryId)
     {
-        // get category by id
+        String query = "SELECT * FROM categories WHERE category_id = ?";
+        try (Connection connection = getConnection())
+        {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, categoryId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next())
+            {
+                return mapRow(resultSet);
+            }
+        }
+        catch(SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
         return null;
     }
 
     @Override
     public Category create(Category category)
     {
-        // create a new category
-        return null;
+        String query = "INSERT INTO categories (category_id, name, description) VALUES (?, ?, ?)";
     }
 
     @Override
