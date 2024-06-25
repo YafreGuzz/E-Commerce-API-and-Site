@@ -53,7 +53,7 @@ public class CategoriesController
        }
     }
 
-    @GetMapping("{id}/products")
+    @GetMapping("{categoryId}/products")
     @PreAuthorize("permitAll()")
     public List<Product> getProductsById(@PathVariable int categoryId)
     {
@@ -74,7 +74,7 @@ public class CategoriesController
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{categoryId}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void updateCategory(@PathVariable int id, @RequestBody Category category) {
         try
@@ -87,7 +87,7 @@ public class CategoriesController
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{categoryId}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteCategory(@PathVariable int id)
     {
