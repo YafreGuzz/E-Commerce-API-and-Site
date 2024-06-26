@@ -36,7 +36,7 @@ public class CategoriesController
         return categoryDao.getAllCategories();
     }
 
-    @GetMapping("/{categoryId}")
+    @GetMapping("/{id}")
     @PreAuthorize("permitAll()")
     public Category getById(@PathVariable int id)
     {
@@ -61,6 +61,7 @@ public class CategoriesController
     }
 
     @PostMapping("")
+    @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Category addCategory(@RequestBody Category category)
     {
@@ -74,7 +75,7 @@ public class CategoriesController
         }
     }
 
-    @PutMapping("/{categoryId}")
+    @PutMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void updateCategory(@PathVariable int id, @RequestBody Category category) {
         try
@@ -87,7 +88,7 @@ public class CategoriesController
         }
     }
 
-    @DeleteMapping("/{categoryId}")
+    @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteCategory(@PathVariable int id)
     {
